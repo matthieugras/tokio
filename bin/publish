@@ -3,13 +3,16 @@ set -e
 USAGE="Publish a new release of a tokio crate
 
 USAGE:
-    $(basename "$0") [OPTIONS] [CRATE] [VERSION]
+    $(basename "$0") [OPTIONS] [SUBCOMMAND] <CRATE> <VERSION>
 
 OPTIONS:
     -v, --verbose   Use verbose Cargo output
     -d, --dry-run   Perform a dry run (do not publish or tag the release)
-    -h, --help      Show this help text and exit"
+    -h, --help      Show this help text and exit
 
+SUBCOMMANDS:
+    release     Tag and publish the specified version (default)
+"
 DRY_RUN=""
 VERBOSE=""
 
