@@ -47,14 +47,21 @@ verify() {
 release() {
     status "Releasing" "$CRATE v$VERSION"
     cargo package $VERBOSE
-    cargo publish $VERBOSE $DRY_RUN
-
-    status "Tagging" "$TAG"
     if [ -n "$DRY_RUN" ]; then
+        cargo publish $VERBOSE "--dry-run"
         echo "# git tag $TAG && git push --tags"
-    else
-        git tag "$TAG" && git push --tags
+        return 0
     fi
+
+    cargo publish $VERBOSE "--dry-run"
+    read -r "response?Do you want to publish and tag $CRATE $VERSION [y/N]?"
+    if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+        return 0
+    fi
+
+    cargo publish $VERBOSE
+    status "Tagging" "$TAG"
+    git tag "$TAG" && git push --tags
 }
 
 while [[ $# -gt 0 ]]
